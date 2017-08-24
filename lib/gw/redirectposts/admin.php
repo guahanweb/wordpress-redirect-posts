@@ -22,23 +22,95 @@ class Admin {
     }
 
     public function listen() {
+        // admin  menu
+        \add_action('admin_menu', array($this, 'setupAdminMenu'), 5);
+        
+        // render and process
         \add_action('add_meta_boxes', array($this, 'addPostMetaBox'), 10, 2);
         \add_action('save_post', array($this, 'savePostMetaBox'), 10, 2);
-        \add_action('admin_notices', array($this, 'displayErrors'));
+        \add_action('admin_notices', array($this, 'displayErrors'), 10);
+
+        // alert if pages are redirecting
+        \add_action('load-post.php', array($this, 'loadPost'), 10);
+    }
+
+    public function setupAdminMenu() {
+        $this->addPluginMenu();
+    }
+
+    public function addPluginMenu() {
+        add_menu_page(__('Redirect Posts', $this->config->domain), __('Redirect Posts', $this->config->domain), 'manage_options', 'gw-redirect-posts-home', array($this, 'renderDashboard'), 'dashicons-external', 30);
+        add_submenu_page('gw-redirect-posts-home', __('Settings', $this->config->domain), __('Settings', $this->config->domain), 'manage_options', 'gw-redirect-posts-home', array($this, 'renderDashboard'));
+    }
+
+    public function renderDashboard() {
+        $page = new Pages\Dashboard($this->config);
+        $page->process();
+        $page->render();
+    }
+
+    public function adminHelp() {
+
+    }
+
+    public function getPageUrl($page = 'config') {
+        $args = array('page' => 'gw-redirect-posts-config');
+        // if custom page is needed, modify query params here
+        $url = \add_query_arg($args, \admin_url('options-general.php'));
+        return $url;
+    }
+
+    public function getLink($post_id) {
+        $url = \get_post_meta(absint($post_id), $this->config->meta['redirect_url'], true);
+        return empty($url) ? false : $url;
+    }
+
+    public function loadPost() {
+        if (isset($_GET['post']) && $this->getLink( (int) $_GET['post'] )) {
+            \add_action('admin_notices', array($this, 'notifyOfExternalLink'));
+        }
+    }
+
+    public function notifyOfExternalLink() {
+        $tpl = <<<EOT
+<div class="wrap">
+    <div class="gw-redirectposts-notice">
+        <h2>Referencing External Content</h2>
+        <p>%s</p>
+        <div class="social-link">
+            <h3>Social Media Link</h3>
+            <p>%s</p>
+            <div>
+                <input type="text" readonly="readonly" value="%s" id="gw-redirectposts-social-link" />
+                <a href="#" class="copy-text" id="gw-redirectposts-social-copy">copy to clipboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+EOT;
+        $id = absint($_GET['post']);
+        printf(
+            $tpl,
+            __('This content is pointing to a custom URL. Use the &#8221;Redirect Post Options&#8221; box to change this behavior.', $this->config->domain),
+            __('When posting to social media, use the following link:', $this->config->domain),
+            get_site_url(null, \get_option($this->config->opt_redirect)) . "?post=$id"
+        );
     }
 
     public function displayErrors() {
         global $post;
-        $user_id = \get_current_user_id();
-        $key = sprintf($this->config->meta['error_key'], $post->ID, $user_id);
+        if ($post) {
+            $user_id = \get_current_user_id();
+            $key = sprintf($this->config->meta['error_key'], $post->ID, $user_id);
 
-        if ($error = \get_transient($key)) {
-            ?>
-            <div class="error">
-                <p><?php echo $error->get_error_message(); ?></p>
-            </div>
-            <?php
-            \delete_transient($key);
+            if ($error = \get_transient($key)) {
+                ?>
+                <div class="error">
+                    <p><?php echo $error->get_error_message(); ?></p>
+                </div>
+                <?php
+                \delete_transient($key);
+            }
         }
     }
 
@@ -57,9 +129,17 @@ class Admin {
     public function renderPostMetaBox($post) {
         \wp_nonce_field(basename(__FILE__), $this->nonce_name);
         $redirect_url = \get_post_meta($post->ID, $this->config->meta['redirect_url'], true);
+
+        $new_tab = \get_post_meta($post->ID, $this->config->meta['new_tab'], true);
+        $new_tab = empty($new_tab) ? '1' : $new_tab;
+
         ?>
         <p>
             <input type="text" name="redirect_url" value="<?php echo $redirect_url; ?>" placeholder="<?php _e('redirect url', $this->config->domain); ?>" class="widefat" />
+        </p>
+        <p class="gw-input-group-padded">
+            <input type="checkbox" name="new_tab"<?php echo $new_tab == '1' ? ' checked="checked"' : ''; ?> id="gw-redirect-post-new-tab" />
+            <label for="gw-redirect-post-new-tab"><?php _e('open link in new tab', $this->config->domain) ?></label>
         </p>
         <?php
     }

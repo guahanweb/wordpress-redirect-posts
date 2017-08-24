@@ -1,0 +1,46 @@
+.gw-redirectposts-widget {
+    margin: 15px auto;
+    text-align: center;
+}
+
+.gw-redirectposts-widget .btn {
+    display: inline-block;
+    padding: 6px 18px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease 0s;
+}
+
+.gw-redirectposts-widget .btn:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+.gw-redirectposts-widget .btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.gw-redirectposts-widget .btn-primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+.gw-redirectposts-widget .no-results {
+
+}

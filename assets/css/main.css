@@ -1,0 +1,258 @@
+.alert {
+    border: 1px solid #e5e5e5;
+    padding: 0.4em 1em 1.4em 1em;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    position: relative;
+}
+
+.alert h3.key-status {
+    color: #fff;
+    margin: 1em 0 0.5em 0;
+}
+
+.alert > button.close {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.alert > button.close:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.alert.critical {
+    background-color: #993300;
+}
+
+.alert.active {
+    background-color: #649316;
+}
+
+.alert p.key-status {
+    font-size: 24px;
+}
+
+.alert p.description {
+    color: #fff;
+    font-size: 14px;
+    margin: 0 0;
+    font-style: normal;
+}
+
+.dashboard {
+    margin-top: 1em;
+}
+
+.dashboard *, .dashboard *:before, .dashboard *:after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.dashboard .region {
+    background: #fff;
+    box-shadow: 1px 2px 10px 0px rgba(150, 150, 150, 0.12);
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    padding: 0 10px 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.dashboard > .widget-row {
+    display: block;
+    clear: both;
+}
+
+.widget-row > .region {
+    display: inline-block;
+    margin-left: 1.5em;
+    vertical-align: top;
+}
+
+.widget-row > .region:first-child {
+    margin-left: 0;
+}
+
+.region header {
+    display: flex;
+}
+
+.region h3 {
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 30px;
+    color: #464646;
+    height: 40px;
+    display: inline-block;
+    overflow: hidden;
+    padding: 10px 0 0;
+    margin: 0;
+    flex: 1;
+    -webkit-box-flex: 1;
+}
+
+.region h3 .title-text {
+    max-width: 100%;
+    position: relative;
+}
+
+.region .toolbar .fa {
+    font-size: 22px;
+}
+
+.toolbar {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.toolbar button {
+    margin: 0;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+    border: none;
+    background: transparent;
+    opacity: 0.6;
+}
+
+.toolbar button:hover {
+    opacity: 1;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.toolbar button.add { color: #336600; }
+
+button.remove {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: rgba(255, 0, 0, 0.5);
+    padding: 2px;
+    float: right;
+}
+
+button.remove:hover {
+    color: rgba(255, 0, 0, 1);
+}
+
+.btn {
+    border: 1px solid #aaa;
+    background-color: #f4f4f4;
+    border-radius: 3px;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 32px;
+    vertical-align: middle;
+    display: inline-block;
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #eaeaea;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.btn.btn-action {
+    background-color: #5cb85c;
+    color: #fff;
+    border-color: #4cae4c;
+}
+
+.btn.btn-action:hover {
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.btn.btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.btn.btn-primary:hover {
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+.input-group {
+
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+.input-group label + input[type=text] {
+    width: 400px;
+}
+
+.input-group > .note {
+    font-size: 11px;
+    font-style: italic;
+    color: #999;
+    display: block;
+}
+
+.gw-redirectposts-notice {
+    background-color: #fffae0;
+    border: 1px solid #d8d4bc;
+    padding: 15px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.12);
+}
+
+.gw-redirectposts-notice h2 {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 36px;
+    color: #464646;
+    margin: 0;
+}
+
+.gw-redirectposts-notice .social-link h3 {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 30px;
+    color: #464646;
+    margin: 0;
+}
+
+.social-link input[readonly] {
+    font-size: 18px;
+    background-color: #fff;
+    width: 480px;
+    display: inline-block;
+    height: 29px;
+}
+
+.social-link a.copy-text {
+    font-size: 12px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    padding-bottom: 5px;
+    margin-left: 10px;
+}
+
+.social-link a.copy-text:hover {
+    text-decoration: underline;
+}
+
