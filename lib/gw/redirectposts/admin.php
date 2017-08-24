@@ -77,23 +77,13 @@ class Admin {
     <div class="gw-redirectposts-notice">
         <h2>Referencing External Content</h2>
         <p>%s</p>
-        <div class="social-link">
-            <h3>Social Media Link</h3>
-            <p>%s</p>
-            <div>
-                <input type="text" readonly="readonly" value="%s" id="gw-redirectposts-social-link" />
-                <a href="#" class="copy-text" id="gw-redirectposts-social-copy">copy to clipboard</a>
-            </div>
-        </div>
     </div>
 </div>
 EOT;
         $id = absint($_GET['post']);
         printf(
             $tpl,
-            __('This content is pointing to a custom URL. Use the &#8221;Redirect Post Options&#8221; box to change this behavior.', $this->config->domain),
-            __('When posting to social media, use the following link:', $this->config->domain),
-            get_site_url(null, \get_option($this->config->opt_redirect)) . "?post=$id"
+            __('This content is pointing to a custom URL. Use the &#8221;Redirect Post Options&#8221; box to change this behavior.', $this->config->domain)
         );
     }
 
@@ -150,6 +140,7 @@ EOT;
 
         $user_id = \get_current_user_id();
         $redirect_url = isset($_POST['redirect_url']) ? trim($_POST['redirect_url']) : '';
+        $new_tab = isset($_POST['new_tab']) ? 1 : 0;
         if (!empty($redirect_url)) {
             // validate the URL!
             $context = stream_context_create(array('http' => array('method' => 'HEAD')));
@@ -163,6 +154,7 @@ EOT;
                     $allowable = array(200, 301, 302);
                     if (in_array(intval($match[1]), $allowable)) {
                         \update_post_meta($post_id, $this->config->meta['redirect_url'], sanitize_text_field($redirect_url));
+                        \update_post_meta($post_id, $this->config->meta['new_tab'], $new_tab);
                         $valid = true;
                     }
                 }
@@ -176,7 +168,7 @@ EOT;
             }
         } else {
             \delete_post_meta($post_id, $this->config->meta['redirect_url']);
-            \delete_post_meta($post_id, 'redirect_output');
+            \delete_post_meta($post_id, $this->config->meta['new_tab']);
         }
     }
 }

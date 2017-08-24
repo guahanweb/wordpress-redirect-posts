@@ -68,6 +68,9 @@ class Plugin {
         // handle the permalink
         \add_action('post_link', array($this, 'link'), 20, 2);
         \add_action('post_type_link', array($this, 'link'), 20, 2);
+
+        // append to content on post page
+        \add_filter('the_content', array($this, 'addContent'));
     }
 
     public function getLink($post_id) {
@@ -75,13 +78,37 @@ class Plugin {
         return empty($url) ? false : $url;
     }
 
+    public function addContent($content) {
+        $post = $GLOBALS['post'];
+        $redirect_url = \get_post_meta($post->ID, $this->config->meta['redirect_url'], true);
+
+        if (\is_singular() && $redirect_url) {
+
+            $output = '<div class="gw-redirectposts-widget">';
+            $output .= <<<EOF
+<div class="redirect-link">
+    <a href="%s" target="_blank" class="btn btn-primary">%s</a>
+</div>
+EOF;
+            $output = sprintf($output, $redirect_url, __('Continue Reading', $this->config->domain));
+            $output .= '</div>';
+            $content .= $output;
+        }
+
+        return $content;
+    }
+
     public function link($link, $post) {
         $post = \get_post($post);
         $meta_link = $this->getLink($post->ID);
+        $new_tab = \get_post_meta($post->ID, $this->config->meta['new_tab'], true);
 
         if ($meta_link) {
             if (!is_admin()) {
-                $link .= '#new_tab';
+                $link = \add_query_arg('follow', '1', $link);
+                if ($new_tab) {
+                    $link .= '#new_tab';
+                }
             }
         }
 
@@ -91,9 +118,10 @@ class Plugin {
 
     public function redirectPost() {
         if (\is_singular()) {
+            $follow = isset($_GET['follow']) && $_GET['follow'] == 1;
             $post = $GLOBALS['wp_query']->posts[0];
             $redirect_url = \get_post_meta($post->ID, $this->config->meta['redirect_url'], true);
-            if (!empty($redirect_url)) {
+            if (!empty($redirect_url) && $follow) {
                 // BE SURE THIS STAYS AS 302!!!
                 // otherwise, browser cache will not pick up future changes
                 \wp_redirect($redirect_url, 302); 
