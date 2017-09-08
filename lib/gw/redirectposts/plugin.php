@@ -70,7 +70,7 @@ class Plugin {
         \add_action('post_type_link', array($this, 'link'), 20, 2);
 
         // append to content on post page
-        \add_filter('the_content', array($this, 'addContent'));
+        \add_filter('the_content', array($this, 'addContent'), 6);
     }
 
     public function getLink($post_id) {
