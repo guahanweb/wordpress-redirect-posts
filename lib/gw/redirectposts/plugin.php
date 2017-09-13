@@ -83,19 +83,24 @@ class Plugin {
         $redirect_url = \get_post_meta($post->ID, $this->config->meta['redirect_url'], true);
 
         if (\is_singular() && $redirect_url) {
-
-            $output = '<div class="gw-redirectposts-widget">';
-            $output .= <<<EOF
-<div class="redirect-link">
-    <a href="%s" target="_blank" class="btn btn-primary">%s</a>
-</div>
-EOF;
-            $output = sprintf($output, $redirect_url, __('Continue Reading', $this->config->domain));
-            $output .= '</div>';
-            $content .= $output;
+            $content .= $this->generateLink($redirect_url);
         }
 
         return $content;
+    }
+
+    public function generateLink($url) {
+        $template = <<<EOF
+<div class="gw-redirectposts-widget">
+    <div class="redirect-link">
+        <a href="%s" target="_blank" class="btn btn-primary">%s</a>
+    </div>
+</div>
+EOF;
+
+        $text = apply_filters('gw_redirectposts_link_text', __('Continue Reading', $this->config->domain));
+        $content = sprintf($template, $url, $text);
+        return apply_filters('gw_redirectposts_link_widget', $content, $url, $text);
     }
 
     public function link($link, $post) {
