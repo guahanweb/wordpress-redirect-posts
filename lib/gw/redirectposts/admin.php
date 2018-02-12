@@ -143,7 +143,7 @@ EOT;
         $new_tab = isset($_POST['new_tab']) ? 1 : 0;
         if (!empty($redirect_url)) {
             // validate the URL!
-            $context = stream_context_create(array('http' => array('method' => 'HEAD')));
+            $context = stream_context_create(array('http' => array('method' => 'GET')));
             $fd = fopen($redirect_url, 'rb', false, $context);
             $response = stream_get_meta_data($fd);
             $valid = false;
