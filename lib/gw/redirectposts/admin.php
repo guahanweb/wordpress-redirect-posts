@@ -164,9 +164,16 @@ EOT;
             fclose($fd);
              */
 
-            $key = sprintf($this->config->meta['error_key'], $post_id, $user_id);
-            $error = new \WP_Error(801, 'Could not validate redirect URL. Please check your address and try again.');
-            \set_transient($key, $error, 20);
+            \update_post_meta($post_id, $this->config->meta['redirect_url'], sanitize_text_field($redirect_url));
+            \update_post_meta($post_id, $this->config->meta['new_tab'], $new_tab);
+
+            /*
+            if (!$valid) {
+                $key = sprintf($this->config->meta['error_key'], $post_id, $user_id);
+                $error = new \WP_Error(801, 'Could not validate redirect URL. Please check your address and try again.');
+                \set_transient($key, $error, 20);
+            }
+             */
         } else {
             \delete_post_meta($post_id, $this->config->meta['redirect_url']);
             \delete_post_meta($post_id, $this->config->meta['new_tab']);
