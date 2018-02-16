@@ -142,7 +142,9 @@ EOT;
         $redirect_url = isset($_POST['redirect_url']) ? trim($_POST['redirect_url']) : '';
         $new_tab = isset($_POST['new_tab']) ? 1 : 0;
         if (!empty($redirect_url)) {
+            /** Disabling due to issues with CloudFlare for now **/
             // validate the URL!
+            /*
             $context = stream_context_create(array('http' => array('method' => 'GET')));
             $fd = fopen($redirect_url, 'rb', false, $context);
             $response = stream_get_meta_data($fd);
@@ -160,12 +162,11 @@ EOT;
                 }
             }
             fclose($fd);
+             */
 
-            if (!$valid) {
-                $key = sprintf($this->config->meta['error_key'], $post_id, $user_id);
-                $error = new \WP_Error(801, 'Could not validate redirect URL. Please check your address and try again.');
-                \set_transient($key, $error, 20);
-            }
+            $key = sprintf($this->config->meta['error_key'], $post_id, $user_id);
+            $error = new \WP_Error(801, 'Could not validate redirect URL. Please check your address and try again.');
+            \set_transient($key, $error, 20);
         } else {
             \delete_post_meta($post_id, $this->config->meta['redirect_url']);
             \delete_post_meta($post_id, $this->config->meta['new_tab']);
